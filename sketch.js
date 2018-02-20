@@ -69,6 +69,10 @@ function draw(){
   }
 }
 
+function tuouchStarted(){
+  alert('touch detected');
+}
+
 function mouseClicked() {
   alert('click detected');
   //ROW 1
