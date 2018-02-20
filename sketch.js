@@ -69,12 +69,7 @@ function draw(){
   }
 }
 
-function tuouchStarted(){
-  alert('touch detected');
-}
-
 function mouseClicked() {
-  alert('click detected');
   //ROW 1
   if( (mouseX > 85) && (mouseX < 115) && (mouseY >85) && (mouseY < 115)){
     if(gameStatus[0][0] == 0){
