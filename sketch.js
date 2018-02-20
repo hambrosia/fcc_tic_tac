@@ -69,7 +69,7 @@ function draw(){
   }
 }
 
-function mouseClicked() {
+function mousePressed() {
   //ROW 1
   if( (mouseX > 85) && (mouseX < 115) && (mouseY >85) && (mouseY < 115)){
     if(gameStatus[0][0] == 0){
@@ -127,7 +127,6 @@ function mouseClicked() {
       gamePlay();
     }
   }
-  return false;
 }
 
 var enemyTurn = function(){
