@@ -1,34 +1,26 @@
 function setup(){
   //createCanvas(windowWidth, windowHeight, WEBGL);
-  createCanvas(400, 400, WEBGL);
+  createCanvas(500, 400, WEBGL);
 
 }
 
 //TO DO
-// OPTIONAL: PROGRAM GUI FOR SYMBOL SELECTION
+// DONE: PROGRAM GUI FOR SYMBOL SELECTION
 // OPTIONAL: MAKE FULL SCREEN / RESPONSIVE 
 // OPTIONAL: PROGRAM TWO-PLAYER MODE
-// OPTIONAL: PROGRAM SCORE BOARD AND RESET
+// DONE: PROGRAM SCORE BOARD AND RESET
 // OPTIONAL: RANDOMIZE PLAYER START VS COMPUTER RESTART
 // OPTIONAL: IMPROVE AI WITH CONTIGUOUS-VALUE DETECTION
+// OPTIONAL: ADD DELAY FOR AI MOVES 
 
-var gameStatus = [ [0,0,0,], [0,0,0,], [0,0,0,] ];
+var gameStatus = [ [0,1,0,], [0,0,0,], [0,2,0,], [] ];
 var userChoice;
 var doRestart = 0;
 var frameTimer = 0;
-
-
-while (userChoice != 'circle' && userChoice != 'square'){
-  var userChoice = prompt("Welcome to Tic-Tac-Toe. Type 'circle or 'square.'");
-}
-if(userChoice == 'square'){
-  userChoice = 1;
-}
-if(userChoice == 'circle'){
-  userChoice = 2;
-}
+var gameStyle = 0; // 0 is for user selection, 1 is for AI, 2 is for 2 player
 
 var angle = 0;
+
 function draw(){
   background(25);
   noStroke();
@@ -51,6 +43,19 @@ function draw(){
         rotateY(angle);
         torus(25);
         rotateY(-angle);
+      }else if(gameStatus[i][j] == 3){
+        directionalLight(240, 50, 50, -1, -0.75, 1);
+        rotateY(0.5);
+        box(25);
+        rotateY(-0.5);
+      }else if(gameStatus[i][j] == 4){
+        directionalLight(100, 240, 100, -1, -0.75, 1);
+        sphere(15);
+      }else if(gameStatus[i][j] == 5){
+        directionalLight(140, 140, 240, -1, -0.75, 1);
+        rotateX(1);
+        cone(15,25);
+        rotateX(-1);
       }
       if(j == gameStatus[i].length -1){
         translate(0,-gameStatus[i].length*100,0);
@@ -70,64 +75,108 @@ function draw(){
 }
 
 function mousePressed() {
+  if(gameStyle == 0){
+    selectUser();
+  }
+  if(gameStyle == 1){
+    getInputAI();
+  }
+  if(gameStyle == 3){
+    //mute input;
+  }
+}
+
+
+var selectUser = function(){
+  gameStatus = [ [0,1,0,], [0,0,0,], [0,2,0,], [] ];
+  if( (mouseX > 60) && (mouseX < 135) && (mouseY >165) && (mouseY < 235)){
+    userChoice = 1;
+    console.log(userChoice);
+    gameStatus[0] = [0,0,0,];
+    gameStatus[1] = [0,0,0,];
+    gameStatus[2] = [0,0,0,];
+    
+    setTimeout(function () {
+      gameStyle = 1;
+    }, 1000);
+  }
+  
+  if( (mouseX > 265) && (mouseX < 335) && (mouseY >165 && mouseY < 235)){
+    userChoice = 2;
+    console.log(userChoice);
+    gameStatus[0] = [0,0,0,];
+    gameStatus[1] = [0,0,0,];
+    gameStatus[2] = [0,0,0,];
+
+    setTimeout(function () {
+      gameStyle = 1;
+    }, 1000);
+  }
+}
+
+var getInputAI = function() {
+  console.log('getInputAI ran');
   //ROW 1
   if( (mouseX > 85) && (mouseX < 115) && (mouseY >85) && (mouseY < 115)){
-    if(gameStatus[0][0] == 0){
+    if( gameStatus[0][0] == 0 ){
       gameStatus[0][0] = userChoice;
-      gamePlay();
+      AIgamePlay();
     }
   }
   if( (mouseX > 185) && (mouseX < 215) && (mouseY >85 && mouseY < 115)){
     if(gameStatus[1][0] == 0){
       gameStatus[1][0] = userChoice;
-      gamePlay();
+      AIgamePlay();
     }
   }
   if( (mouseX > 285) && (mouseX < 315) && (mouseY >85 && mouseY < 115)){
     if(gameStatus[2][0] == 0){
       gameStatus[2][0] = userChoice;
-      gamePlay();
+      AIgamePlay();
     }
   }
   //ROW 2
   if( (mouseX > 85) && (mouseX < 115) && (mouseY >185) && (mouseY < 215)){
     if(gameStatus[0][1] == 0){
       gameStatus[0][1] = userChoice;
-      gamePlay();
+      AIgamePlay();
     }
   }
   if( (mouseX > 185) && (mouseX < 215) && (mouseY >185 && mouseY < 215)){
     if(gameStatus[1][1] == 0){
       gameStatus[1][1] = userChoice;
-      gamePlay();
+      AIgamePlay();
     }
   }
   if( (mouseX > 285) && (mouseX < 315) && (mouseY >185 && mouseY < 215)){
     if(gameStatus[2][1] == 0){
       gameStatus[2][1] = userChoice;
-      gamePlay();
+      AIgamePlay();
     }
   }
   //ROW 3
   if( (mouseX > 85) && (mouseX < 115) && (mouseY >285) && (mouseY < 315)){
     if(gameStatus[0][2] == 0){
       gameStatus[0][2] = userChoice;
-      gamePlay();
+      AIgamePlay();
     }
   }
   if( (mouseX > 185) && (mouseX < 215) && (mouseY >285 && mouseY < 315)){
     if(gameStatus[1][2] == 0){
       gameStatus[1][2] = userChoice;
-      gamePlay();
+      AIgamePlay();
     }
   }
   if( (mouseX > 285) && (mouseX < 315) && (mouseY >285 && mouseY < 315)){
     if(gameStatus[2][2] == 0){
       gameStatus[2][2] = userChoice;
-      gamePlay();
+      AIgamePlay();
     }
   }
 }
+
+
+
 
 var enemyTurn = function(){
   var enemyChoice;
@@ -200,7 +249,7 @@ var checkMapFull = function(){
   return mapFull;
 }
 
-var gamePlay = function(){
+var AIgamePlay = function(){
   var winner = checkForWin();
   if(winner == 0){
     enemyTurn();
@@ -210,6 +259,7 @@ var gamePlay = function(){
     doRestart = winner;
   }
 }
+
 
 var restartGame = function(winner){
   var endMessage = '';
@@ -222,23 +272,24 @@ var restartGame = function(winner){
     enemyChoice == 1;
   }
   if(winner == userChoice){
-    endMessage = 'Congrats, you won! ';
+    gameStatus[3].push(userChoice + 2);
   }
-  if(winner != userChoice){
-    endMessage = 'Computer wins. ';
+  if(winner == enemyChoice){
+    gameStatus[3].push(enemyChoice + 2);
   }
   if(winner == 3){
-    endMessage = 'Draw. ';
+    gameStatus[3].push(5);
   }
-  while (userChoice != 'circle' && userChoice != 'square'){
-    userChoice = prompt(endMessage + "Type 'circle' or 'square' to play again.");
-  }
-  if(userChoice == 'square'){
-    userChoice = 1;
-  }
-  if(userChoice == 'circle'){
-    userChoice = 2;
-  }
+  
   doRestart = 0;
-  gameStatus = [ [0,0,0,], [0,0,0,], [0,0,0,] ];
+  gameStatus[0] = [0,0,0,];
+  gameStatus[1] = [0,0,0,];
+  gameStatus[2] = [0,0,0,];
+  if(gameStatus[3].length > 2){
+    gameStyle =3;
+    setTimeout(function () {
+      gameStyle = 0;
+      selectUser();
+    }, 3000);
+  }
 }
