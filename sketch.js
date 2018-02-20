@@ -127,6 +127,7 @@ function mouseClicked() {
       gamePlay();
     }
   }
+  return false;
 }
 
 var enemyTurn = function(){
